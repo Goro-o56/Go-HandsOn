@@ -6,7 +6,31 @@ services:
     build:
       args:
         - target=dev
+    environment:
+      TODO_ENV: dev
+      PORT: 8080
+      TODO_DB_HOST: todo-db #アプリからDBに接続するための環境変数
+      TODO_DB_PORT: 3306
+      TODO_DB_USER: todo
+      TODO_DB_PASSWORD: todo
+      TODO_DB_DATABASE: todo
     volumes:
       - .:/app
     ports:
-      - "18000:80"
+      - "18000:8080"
+  todo-db:
+    image: mysql
+    platform: linux/amd64
+    container_name: todo-db
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_USER: todo
+      MYSQL_PASSWORD: todo
+      MYSQL_DATABASE: todo
+    volumes:
+      - todo-db-data:/bar/lib/mysql
+      - $PWD/_tools/mysql/conf.d:/etc/mysql/conf.d:cached
+    ports:
+      - "33306:3306"
+volumes:
+  todo-db-data:
