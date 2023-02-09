@@ -104,7 +104,7 @@ func TestRepository_AddTask(t *testing.T) {
 	c := clock.FixedClocker{}
 	var wantID int64 = 20
 	okTask := &entity.Task{
-		Title:    "ok task",
+		Title:    "ok task1",
 		Status:   "todo",
 		Created:  c.Now(),
 		Modified: c.Now(),
