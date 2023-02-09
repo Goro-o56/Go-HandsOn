@@ -37,6 +37,10 @@ jobs:
           go-version: '>=1.18'
       - uses: actions/checkout@v3
       - run : |
+          echo "${{ secrets.PUBLICKEY }}" > public.pem
+          mv public.pem ./auth/cert/      
+          echo "${{ secrets.SECRETKEY }}" > secret.pem
+          mv secret.pem ./auth/cert/
           go install github.com/k0kubun/sqldef/cmd/mysqldef@latest
           mysqldef -u todo -p todo -h 127.0.0.1 -P 3306 todo < ./_tools/mysql/schema.sql
       - run: go test ./... -coverprofile=coverage.out
