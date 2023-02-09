@@ -2,9 +2,10 @@ package handler
 
 import (
 	"Go-Handson/entity"
-	"Go-Handson/store"
 	"Go-Handson/testutil"
 	"bytes"
+	"context"
+	"errors"
 	"github.com/go-playground/validator/v10"
 	"net/http"
 	"net/http/httptest"
@@ -50,10 +51,18 @@ func TestAddTask(t *testing.T) {
 				bytes.NewReader(testutil.LoadFile(t, tt.reqFile)),
 			)
 
+			moq := &AddTaskServiceMock{}
+			moq.AddTaskFunc = func(
+				ctx context.Context, title string,
+			) (*entity.Task, error) {
+				if tt.want.status == http.StatusOK {
+					return &entity.Task{ID: 1}, nil
+				}
+				return nil, errors.New("error from mock")
+			}
+
 			sut := AddTask{
-				Store: &store.TaskStore{
-					Tasks: map[entity.TaskID]*entity.Task{},
-				},
+				Service:   moq,
 				Validator: validator.New(),
 			}
 			sut.ServeHTTP(w, r)
