@@ -6,16 +6,13 @@ import (
 	_ "embed"
 )
 
-const (
-	RoleKey     = "role"
-	UserNameKey = "user_name"
-)
+//go:embed cert/secret.pem
+var rawPrivKey []byte
+
+//go:embed cert/public.pem
+var rawPubKey []byte
 
 type userIDKey struct {
-}
-
-func SetUserID(ctx context.Context, uid entity.UserID) context.Context {
-	return context.WithValue(ctx, userIDKey{}, uid)
 }
 
 func GetUserID(ctx context.Context) (entity.UserID, bool) {
