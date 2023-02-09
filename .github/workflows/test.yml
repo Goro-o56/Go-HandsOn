@@ -39,7 +39,7 @@ jobs:
       - run : |
           echo "${{ secrets.PUBLICKEY }}" > public.pem
           cat public.pem
-          mv public.pem Go-HandsOn/auth/cert/          
+          mv public.pem ./auth/cert/          
           go install github.com/k0kubun/sqldef/cmd/mysqldef@latest
           mysqldef -u todo -p todo -h 127.0.0.1 -P 3306 todo < ./_tools/mysql/schema.sql
       - run: go test ./... -coverprofile=coverage.out
